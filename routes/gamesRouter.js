@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
   } else {
     try {
       const [addedGame] = await dbHelper.insert(newGame);
-      res.status(201).json(addedGame)
+      res.status(201).json(addedGame);
     } catch (err) {
       res.status(500).json({ errorInfo: err.toString() });
     }
@@ -24,8 +24,23 @@ router.get("/", async (req, res) => {
     const games = await dbHelper.get();
     res.status(200).json(games);
   } catch (err) {
-    res.status(500).json({errorInfo: err.toString()});
+    res.status(500).json({ errorInfo: err.toString() });
   }
-})
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const game = await dbHelper.get(id);
+    if (game) {
+      res.status(200).json(game);
+    } else {
+      res.status(404).json("Game not found.");
+    }
+  } catch (err) {
+    res.status(500).json({ errorInfo: err.toString() });
+  }
+});
 
 module.exports = router;
