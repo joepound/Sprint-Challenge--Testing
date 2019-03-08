@@ -7,21 +7,25 @@ const dbHelper = require("../../data/helpers/gamesModel");
 describe("Games routes:", () => {
   const testGames = [
     {
+      GameID: 1,
       GameTitle: "Metal Gear",
       GameGenre: "Stealth",
       GameReleaseYear: 1987
     },
     {
+      GameID: 2,
       GameTitle: "Fallout",
       GameGenre: "RPG",
       GameReleaseYear: 1997
     },
     {
+      GameID: 3,
       GameTitle: "Tekken",
       GameGenre: "Fighting",
       GameReleaseYear: 1994
     },
     {
+      GameID: 4,
       GameTitle: "Pong",
       GameGenre: "Sports"
     }
@@ -65,6 +69,32 @@ describe("Games routes:", () => {
         .post(reqURL)
         .send({});
       expect(res.status).toBe(422);
+    });
+  });
+
+  describe(`Request to "GET /games":`, () => {
+    const reqURL = "/games";
+
+    it("• should return a JSON", async () => {
+      const res = await request(server).get(reqURL);
+      expect(res.type).toBe("application/json");
+    });
+
+    it("• should return status 200", async () => {
+      const res = await request(server).get(reqURL);
+      expect(res.status).toBe(200);
+    });
+
+    it("• should return an empty array if the Games table is empty", async () => {
+      const res = await request(server).get(reqURL);
+      expect(res.body).toEqual([]);
+    });
+
+    it ("• should retrieve all games", async () => {
+      testGames.forEach(game => dbHelper.insert(game));
+
+      const res = await request(server).get(reqURL);
+      expect(res.body).toEqual(testGames);
     });
   });
 });

@@ -4,11 +4,17 @@ module.exports = {
   insert: newGame => db("Games").insert(newGame, "id"),
 
   get: GameID =>
-  GameID
+    GameID
       ? db("Games")
+          .select("GameID", "GameTitle", "GameGenre", "GameReleaseYear")
           .where({ GameID })
           .first()
-      : db("Games"),
+      : db("Games").select(
+          "GameID",
+          "GameTitle",
+          "GameGenre",
+          "GameReleaseYear"
+        ),
 
   delete: GameID =>
     db("Games")
