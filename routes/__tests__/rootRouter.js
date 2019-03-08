@@ -10,7 +10,7 @@ describe("Root URL request:", () => {
   });
 
   it("• should return status 200", async () => {
-    const res = await request(server).get(reqURL;
+    const res = await request(server).get(reqURL)
     expect(res.status).toBe(200);
   });
 
