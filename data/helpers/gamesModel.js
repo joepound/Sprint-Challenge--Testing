@@ -3,15 +3,15 @@ const db = require("../dbConfig.js");
 module.exports = {
   insert: newGame => db("Games").insert(newGame, "id"),
 
-  get: id =>
-    id
+  get: GameID =>
+  GameID
       ? db("Games")
-          .where({ id })
+          .where({ GameID })
           .first()
       : db("Games"),
 
-  delete: id =>
+  delete: GameID =>
     db("Games")
       .delete()
-      .where({ id })
+      .where({ GameID })
 };
