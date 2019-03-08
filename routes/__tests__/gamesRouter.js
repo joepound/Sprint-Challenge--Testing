@@ -56,14 +56,14 @@ describe("Games routes:", () => {
       expect(res.body).toEqual(1);
     });
 
-    // it("• should actually insert the new game into the database", async () => {
-    //   await request(server)
-    //     .post(reqURL)
-    //     .send(testGames[0]);
+    it("• should actually insert the new game into the database", async () => {
+      await request(server)
+        .post(reqURL)
+        .send(testGames[0]);
 
-    //   const addedGame = await dbHelper.get(1);
-    //   expect(addedGame).toEqual(expectedGame[0]);
-    // });
+      const addedGame = await dbHelper.get(1);
+      expect(addedGame).toEqual(testGames[0]);
+    });
 
     it("• should return status 422 upon sending incomplete information", async () => {
       const res = await request(server)
