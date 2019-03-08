@@ -12,4 +12,4 @@ server.use(express.json());
 // server.use("/games", gamesRouter);
 // server.use(errorRouter);
 
-module.exports = server
+module.exports = server;
