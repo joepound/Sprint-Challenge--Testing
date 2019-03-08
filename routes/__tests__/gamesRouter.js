@@ -98,4 +98,32 @@ describe("Games routes:", () => {
       expect(res.body).toEqual(testGames);
     });
   });
+
+  describe(`Request to "GET /games/:id"`, () => {
+    const reqURL = id => `/games/${id}`;
+
+    it("• should return a JSON", async () => {
+      const res = await request(server).get(reqURL(1));
+      expect(res.type).toBe("application/json");
+    });
+
+    it("• should return status 200 if game exists", async () => {
+      await dbHelper.insert(testGames[0]);
+
+      const res = await request(server).get(reqURL(1));
+      expect(res.status).toBe(200);
+    });
+
+    it("• should return status 404 if game does not exist", async () => {
+      const res = await request(server).get(reqURL(1));
+      expect(res.status).toBe(404);
+    });
+
+    it("• should return the requested game with the corresponding ID", async() => {
+      await dbHelper.insert(testGames[0]);
+
+      const res = await request(server).get(reqURL(1));
+      expect(res.body).toEqual(testGames[0]);
+    });
+  });
 });
