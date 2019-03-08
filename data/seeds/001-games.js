@@ -1,13 +1,14 @@
-
-exports.seed = function(knex, Promise) {
+exports.seed = (knex, Promise) =>
   // Deletes ALL existing entries
-  return knex('table_name').del()
-    .then(function () {
+  knex("Games")
+    .truncate()
+    .then(() =>
       // Inserts seed entries
-      return knex('table_name').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
-      ]);
-    });
-};
+      knex("Games").insert([
+        {
+          GameTitle: "Pacman",
+          GameGenre: "Arcade",
+          GameReleaseYear: 1980
+        }
+      ])
+    );
