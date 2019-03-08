@@ -31,6 +31,7 @@ describe("Games routes:", () => {
       GameReleaseYear: null
     }
   ];
+  const insertAllGames = () => testGames.forEach(game => (async () => await dbHelper.insert(game))());
 
   afterEach(() => db("Games").truncate());
 
@@ -92,7 +93,7 @@ describe("Games routes:", () => {
     });
 
     it("• should retrieve all games", async () => {
-      testGames.forEach(game => (async () => await dbHelper.insert(game))());
+      insertAllGames();
 
       const res = await request(server).get(reqURL);
       expect(res.body).toEqual(testGames);
@@ -124,6 +125,35 @@ describe("Games routes:", () => {
 
       const res = await request(server).get(reqURL(1));
       expect(res.body).toEqual(testGames[0]);
+    });
+  });
+
+  describe(`Request to "DELETE /games/:id"`, () => {
+    const reqURL = id => `/games/${id}`;
+
+    it("• should return a JSON", async () => {
+      const res = await request(server).delete(reqURL(1));
+      expect(res.type).toBe("application/json");
+    });
+
+    it("• should return status 200 if game exists", async () => {
+      await dbHelper.insert(testGames[0]);
+
+      const res = await request(server).delete(reqURL(1));
+      expect(res.status).toBe(200);
+    });
+
+    it("• should return status 404 if game does not exist", async () => {
+      const res = await request(server).delete(reqURL(1));
+      expect(res.status).toBe(404);
+    });
+
+    it("• should actually delete the specified game", async () => {
+      insertAllGames();
+      await request(server).delete(reqURL(1));
+
+      const remainingGames = await dbHelper.get();
+      expect(remainingGames).toEqual(testGames.slice(1));
     });
   });
 });
