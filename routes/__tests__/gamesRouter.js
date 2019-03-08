@@ -27,7 +27,8 @@ describe("Games routes:", () => {
     {
       GameID: 4,
       GameTitle: "Pong",
-      GameGenre: "Sports"
+      GameGenre: "Sports",
+      GameReleaseYear: null
     }
   ];
 
@@ -90,8 +91,8 @@ describe("Games routes:", () => {
       expect(res.body).toEqual([]);
     });
 
-    it ("• should retrieve all games", async () => {
-      testGames.forEach(game => dbHelper.insert(game));
+    it("• should retrieve all games", async () => {
+      testGames.forEach(game => (async () => await dbHelper.insert(game))());
 
       const res = await request(server).get(reqURL);
       expect(res.body).toEqual(testGames);

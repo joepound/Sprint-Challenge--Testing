@@ -19,4 +19,13 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const games = await dbHelper.get();
+    res.status(200).json(games);
+  } catch (err) {
+    res.status(500).json({errorInfo: err.toString()});
+  }
+})
+
 module.exports = router;
